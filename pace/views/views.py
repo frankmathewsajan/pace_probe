@@ -1,8 +1,10 @@
 import json
 
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
+from pace.forms import ProfileForm
 from pace.models import Profile
 
 
@@ -12,8 +14,7 @@ def index(request):
     else:
         return redirect('login')
 
-
-
+@login_required
 def setup(request):
     if request.method == "POST":
         # Assuming the user is already authenticated
@@ -27,6 +28,7 @@ def setup(request):
         user_profile.first_name = data.get("fullName", "")
         user_profile.email = data.get("email", "")
         user_profile.age = data.get("age", "")  # Assuming you have an age field in the user_profile
+        user_profile.bio = data.get("bio", "")
         user_profile.learning_style = data.get("learningStyle", "")
         user_profile.education_level = data.get("educationLevel", "")
         user_profile.interests = data.get("interests", [])
@@ -45,12 +47,40 @@ def setup(request):
         "profile": Profile.objects.filter(user=request.user).first(),
         "edu_list": ["Primary", "Secondary", "High School", "Undergraduate", "Graduate", "Professional"],
         "style_list": ["Visual", "Auditory", "Reading/Writing", "Kinesthetic"],
+        "interests": ["Oceanography",
+                      "Satellite Technology",
+                      "Earth Observation",
+                      "Remote Sensing",
+                      "Marine Biology",
+                      "Exoplanets",
+                      "Climate Science",
+                      "Add Your Own"],
+        "goals": [
+            "Explore Planets and Satellites",
+            "Develop Critical Thinking in Science",
+            "Enhance Research Skills",
+            "Build Satellite Expertise",
+            "Master Space Concepts",
+            "Develop Remote Sensing Skills",
+            "Contribute to Climate Solutions"
+        ]
 
     })
 
+@login_required
 def profile(request):
-    return render(request, "pace/user/profile.html", {
-        "profile": Profile.objects.filter(user=request.user).first(),
-        "edu_list": ["Primary", "Secondary", "High School", "Undergraduate", "Graduate", "Professional"],
-        "style_list": ["Visual", "Auditory", "Reading/Writing", "Kinesthetic"],
-    })
+    user_profile, created = Profile.objects.get_or_create(user=request.user)
+
+    initial_data = {
+        'first_name': user_profile.user.first_name,
+        'email': user_profile.user.email,
+        'interests': ', '.join(user_profile.interests),
+        'goals': ', '.join(user_profile.goals),
+    }
+    form = ProfileForm(instance=user_profile, initial=initial_data)
+
+    context = {
+        'profile': profile,
+        'form': form,
+    }
+    return render(request, 'pace/user/profile.html', context)

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Started</title>
+    <title>{% if user.profile.is_setup %}Edit{% else %}Get Started{% endif %}</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -87,7 +87,7 @@
 <body>
 
 <div class="container form-container">
-    <h2 class="text-center">Get Started</h2>
+    <h2 class="text-center">{% if user.profile.is_setup %}{% else %}Get Started{% endif %}</h2>
 
     <!-- Progress bar -->
     <div class="progress">
@@ -135,7 +135,25 @@
                 <button type="button" class="btn btn-primary next-step">Next →</button>
             </div>
         </div>
+        {% if user.profile.is_setup %}
+            <div class="form-step" style="width: 100%;">
+                <h5>Bio</h5>
+                <textarea name="bio" id="bio" aria-label="Bio"
+                          style="border: 1px solid #ccc; 
+               border-radius: 8px; 
+               width: 65%; 
+               height: 150px; 
+               padding: 10px; 
+               font-size: 1rem; 
+               box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+               resize: vertical;">{{ user.profile.bio }}</textarea>
+                <div class="d-flex justify-content-between" style="margin-top: 10px;">
+                    <button type="button" class="btn btn-secondary prev-step">← Previous</button>
+                    <button type="button" class="btn btn-primary next-step">Next →</button>
+                </div>
+            </div>
 
+        {% endif %}
         <!-- Step 3: Learning Style -->
         <div class="form-step">
             <h5>Preferred Learning Style</h5>
@@ -155,23 +173,18 @@
         <div class="form-step">
             <h5>Topics of Interest</h5>
             <div class="form-group" id="interestOptions">
-                <div class="pill-button" data-value="Math">Math</div>
-                <div class="pill-button" data-value="Science">Science</div>
-                <div class="pill-button" data-value="Literature">Literature</div>
-                <div class="pill-button" data-value="History">History</div>
-                <div class="pill-button" data-value="Technology">Technology</div>
-                <div class="pill-button" data-value="Art">Art</div>
-                <div class="pill-button" data-value="Sports">Sports</div>
+                {% for i in interests %}
+                    <div class="pill-button {% if i in user.profile.interests %}selected{% endif %}" data-value="{{ i }}">{{ i }}</div>
+                {% endfor %}
                 <div class="pill-button" data-value="CustomInterest">Add Your Own</div>
             </div>
             <input type="text" class="form-control mt-3" id="customInterest" name="customInterest"
                    placeholder="Enter your interest" style="display:none;">
             <h5 class="mt-4">Learning Goals</h5>
             <div class="form-group" id="goalOptions">
-                <div class="pill-button" data-value="Improve Skills">Improve Skills</div>
-                <div class="pill-button" data-value="Pass Exam">Pass Exam</div>
-                <div class="pill-button" data-value="Understand Concepts">Understand Concepts</div>
-                <div class="pill-button" data-value="Prepare for Future">Prepare for Future</div>
+                {% for g in goals %}
+                    <div class="pill-button {% if g in user.profile.goals %}selected{% endif %}" data-value="{{ g }}">{{ g }}</div>
+                {% endfor %}
                 <div class="pill-button" data-value="CustomGoal">Add Your Own</div>
             </div>
             <input type="text" class="form-control mt-3" id="customGoal" name="customGoal" placeholder="Enter your goal"
@@ -286,6 +299,7 @@
             const fullName = document.getElementById("fullName").value;
             const email = document.getElementById("email").value;
             const age = document.getElementById("age").value;
+            const bio = document.getElementById("bio").value;
 
             // Get selected learning style
             const selectedLearningStyle = [...learningStyleButtons].find(button => button.classList.contains("selected"))?.dataset.value;
@@ -308,14 +322,13 @@
                 fullName,
                 email,
                 age,
+                bio,
                 learningStyle: selectedLearningStyle,
                 educationLevel: selectedEducation,
                 interests: selectedInterests,
                 goals: selectedGoals,
             };
 
-            // Send POST request to /setup
-            // send csrftoken too
             fetch('/setup', {
                 method: 'POST',
                 headers: {

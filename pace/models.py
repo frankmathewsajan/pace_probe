@@ -19,7 +19,7 @@ class Profile(models.Model):
     goals = models.JSONField(default=list, blank=True)  # List of goals
     is_setup = models.BooleanField(default=False)  # Profile setup status
 
-    avatar = models.ImageField(default='default.jpg', upload_to='profile_images')
+    avatar = models.ImageField(default='profile_images/default.png', upload_to='profile_images')
     bio = models.TextField(blank=True)  # Make bio optional
 
     def __str__(self):

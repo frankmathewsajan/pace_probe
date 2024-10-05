@@ -28,7 +28,7 @@ def login(request):
                 "message": "Invalid username and/or password."
             })
     else:
-        return render(request, "pace/auth/login.html")
+        return render(request, "pace/auth/login.html") if request.user.is_anonymous else redirect('index')
 
 
 def register(request):
@@ -56,7 +56,7 @@ def register(request):
         user_login(request, user)
         return HttpResponseRedirect(reverse("setup"))
     else:
-        return render(request, "pace/auth/register.html")
+        return render(request, "pace/auth/register.html") if request.user.is_anonymous else redirect('index')
 
 
 def logout(request):
