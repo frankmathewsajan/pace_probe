@@ -1,6 +1,32 @@
 {% extends "pace/layout.html" %}
 {% load static %}
-{% block title %}NASA PACE Probe{% endblock %}
+{% block title %}PACE Probe{% endblock %}
+{% block styles %}
+    <style>
+        .card {
+            border: 1px solid #f0a465;
+            background-color: #fef4eb;
+            text-align: center;
+            padding: 20px;
+            height: 25vh;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            /* Ensures smooth hover transition */
+        }
+
+        .card:hover {
+            transform: scale(1.05); /* Zoom effect */
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Adds shadow for depth */
+        }
+
+        .card h5 {
+            color: #ff6f00;
+        }
+
+        .card-body {
+            color: #7a7a7a;
+        }
+    </style>
+{% endblock %}
 {% block body %}
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
@@ -41,9 +67,84 @@
     </nav>
 
     <div class="section">
-        <div class="container">
-            <div class="row full-height justify-content-center" style>
-                Yokoso!!!
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col">
+                    <h1 class="text-start">Main Courses</h1>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <!-- Beginner Level -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Introduction to Ocean and Climate Data</h5>
+                            <p class="card-text">Beginner Level</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Intermediate Level -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Understanding PACE Data: Aerosols & Ocean Color</h5>
+                            <p class="card-text">Intermediate Level</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Advanced Level -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Data Analysis and Visualization with PACE Tools</h5>
+                            <p class="card-text">Advanced Level</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+             <div class="row">
+                <div class="col">
+                    <h1 class="text-start">PACE Ecosystem</h1>
+                </div>
+            </div>
+            <div class="row mt-2">
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">PLANKTON</h5>
+                            <p class="card-text">Beginner Level</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">AEROSOL</h5>
+                            <p class="card-text">Intermediate Level</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">CLOUD</h5>
+                            <p class="card-text">Advanced Level</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">OCEAN</h5>
+                            <p class="card-text">Advanced Level</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
